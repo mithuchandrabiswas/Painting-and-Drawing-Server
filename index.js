@@ -24,10 +24,26 @@ const client = new MongoClient(uri, {
     }
 });
 
+//https://i.ibb.co/bm32RsT/img20240427-12245804.png
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+        // await client.connect();
+
+        // Create database and collection
+        const craftsCollection = client.db("craftsDB").collection("crafts");
+
+
+        
+
+        // app.post('/add_coffee', async (req, res) => {
+        //     const addedNewCoffee = req.body;
+        //     console.log(addedNewCoffee);
+        //     // Insert the defined document into the "coffeeCollection" collection
+        //     const result = await coffee.insertOne(addedNewCoffee);
+        //     res.send(result);
+        // })
+
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
