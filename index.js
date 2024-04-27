@@ -34,7 +34,20 @@ async function run() {
         const craftsCollection = client.db("craftsDB").collection("crafts");
 
 
-        
+        // Data Received from Database
+        app.get('/addcrafts', async (req, res) => {
+            const cursor = craftsCollection.find();
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
+        // Received data from client side and send to database
+        app.post('/addcrafts', async (req, res) => {
+            const newCrafts = req.body;
+            console.log(newCrafts);
+            const result = await craftsCollection.insertOne(newCrafts);
+            res.send(result);   // result send to Database
+        })
 
         // app.post('/add_coffee', async (req, res) => {
         //     const addedNewCoffee = req.body;
