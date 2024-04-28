@@ -41,6 +41,11 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result);
         })
+        app.get('/categories', async(req,res) => {
+            const cursor = categoriesCollection.find();
+            const result = await cursor.toArray();
+            res.send(result);
+        })
 
         // Received data from client side and send to database
         app.post('/addcrafts', async (req, res) => {
