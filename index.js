@@ -32,6 +32,7 @@ async function run() {
 
         // Create database and collection
         const craftsCollection = client.db("craftsDB").collection("crafts");
+        const categoriesCollection = client.db("categoriesDB").collection("categories")
 
 
         // Data Received from Database
