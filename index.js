@@ -45,14 +45,40 @@ async function run() {
         // for id fetching
         app.get('/addcrafts/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: new ObjectId(id)};
+            const query = { _id: new ObjectId(id) };
             const result = await craftsCollection.findOne(query);
             res.send(result);
         })
 
-        app.get('/categories', async(req,res) => {
+        app.get('/categories', async (req, res) => {
             const cursor = categoriesCollection.find();
             const result = await cursor.toArray();
+            res.send(result);
+        })
+
+        // Update Data
+        app.put('/addcrafts/:id', async (req, res) => {
+            const id = req.params.id;
+            // Create a filter for update craft
+            const filter = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const updatedCraft = req.body;
+            const craft = {
+                $set: {
+                    image: updatedCraft.image,
+                    craftName: updatedCraft.craftName,
+                    subCategory: updatedCraft.subCategory,
+                    shortDescription: updatedCraft.shortDescription,
+                    price: updatedCraft.price,
+                    rating: updatedCraft.rating,
+                    customization: updatedCraft.customization,
+                    processingTime: updatedCraft.processingTime,
+                    stockStatus: updatedCraft.stockStatus
+                },
+            }
+
+            // Update the first document that matches the filter
+            const result = await craftsCollection.updateOne(filter, craft, options);
             res.send(result);
         })
 
@@ -67,7 +93,7 @@ async function run() {
         // Delete Craft from database
         app.delete('/addcrafts/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: new ObjectId(id)};
+            const query = { _id: new ObjectId(id) };
             // console.log(query);
             const result = await craftsCollection.deleteOne(query);
             // console.log(object);
