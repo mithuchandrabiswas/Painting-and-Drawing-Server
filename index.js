@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 // Config
 const app = express();
@@ -41,6 +41,15 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result);
         })
+
+        // for id fetching
+        app.get('/addcrafts/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = {_id: new ObjectId(id)};
+            const result = await craftsCollection.findOne(query);
+            res.send(result);
+        })
+
         app.get('/categories', async(req,res) => {
             const cursor = categoriesCollection.find();
             const result = await cursor.toArray();
@@ -55,16 +64,18 @@ async function run() {
             res.send(result);   // result send to Database
         })
 
-        // app.post('/add_coffee', async (req, res) => {
-        //     const addedNewCoffee = req.body;
-        //     console.log(addedNewCoffee);
-        //     // Insert the defined document into the "coffeeCollection" collection
-        //     const result = await coffee.insertOne(addedNewCoffee);
-        //     res.send(result);
-        // })
+        // Delete Craft from database
+        app.delete('/addcrafts/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = {_id: new ObjectId(id)};
+            // console.log(query);
+            const result = await craftsCollection.deleteOne(query);
+            // console.log(object);
+            res.send(result);
+        })
 
         // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
+        // await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
